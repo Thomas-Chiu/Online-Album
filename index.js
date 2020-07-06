@@ -19,13 +19,17 @@ const app = express()
 
 app.use(bodyParser.json())
 app.use(cors({ // cors 跨網域設定
-  origin (origin, callback) {
-    if (process.env.ALLOW_CORS === 'true') { // 上傳FTP 時，dot.env 不知為何將bool 視為字串，因此判斷式的bool 改成字串
-      callback(null, true) // 若開發環境，允許
-    } else if (origin.includes('github')) {
-      callback(null, true) // 非開發環境，但從github 過來，允許
+  origin (origin, callback) { // 直接開網頁，不是ajax 時，origin 是undefined
+    if (origin === undefined) {
+      callback(null, true)
     } else {
-      callback(new Error('Not Allowed'), false) // 非開發環境也非github 過來，拒絕
+      if (process.env.ALLOW_CORS === 'true') { // 上傳FTP 時，dot.env 不知為何將bool 視為字串，因此判斷式的bool 改成字串
+        callback(null, true) // 若開發環境，允許
+      } else if (origin.includes('github')) {
+        callback(null, true) // 非開發環境，但從github 過來，允許
+      } else {
+        callback(new Error('Not Allowed'), false) // 非開發環境也非github 過來，拒絕
+      }
     }
   },
   credentials: true
