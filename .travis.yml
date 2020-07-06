@@ -13,7 +13,7 @@ deploy:
   # 不清除編譯後的檔案
   skip_cleanup: true
   # Github_Token，這邊名字要和Travis CI 的setting 一致
-  github_token: $Github_Token
+  github_token: $GITHUB_TOKEN
   # 保留 commit 紀錄而不是 force push
   keep_history: true
   # 要上傳的資料夾
